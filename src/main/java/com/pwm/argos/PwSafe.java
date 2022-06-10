@@ -46,6 +46,12 @@ public class PwSafe {
         this.path = path;
     }
 
+    public ArrayList<EncryptedP> searchFor(String... args){
+        ArrayList<EncryptedP> resultList = new ArrayList<>(0);
+
+        return resultList;
+    }
+
     /**
      * reads the safe from a file at {@link PwSafe#path} (with JSON)
      */
