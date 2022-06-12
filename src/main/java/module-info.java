@@ -6,6 +6,7 @@ module com.pwm.argos {
     requires org.kordamp.bootstrapfx.core;
     requires com.google.gson;
     requires org.apache.commons.codec;
+    requires org.beryx.textio;
 
     opens com.pwm.argos to javafx.fxml, com.google.gson;
     exports com.pwm.argos;
