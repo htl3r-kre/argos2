@@ -21,6 +21,10 @@ public class Encryptor {
         return DigestUtils.sha256Hex(input);
     }
 
+    public static String hash2 (String input){
+        return DigestUtils.sha256Hex(hash(input));
+    }
+
     public static String encrypt (String clearText, String keyHash) throws  NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
         SecretKey key = new SecretKeySpec(MessageDigest.getInstance("SHA-256").digest(keyHash.getBytes(StandardCharsets.UTF_8)), "AES");
         Cipher cipher = Cipher.getInstance(alg);

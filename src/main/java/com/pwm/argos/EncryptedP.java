@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 
 public class EncryptedP {
+    protected int uid;
     protected String value;
     protected String userName;
     protected ArrayList<String> tags;
@@ -27,13 +28,19 @@ public class EncryptedP {
             tags.add(s);
         }
     }
+
+    public EncryptedP(int uid, String user, String pw, String[] tagList) {
+        this.uid = uid;
+        this.value = pw;
+        this.userName = user;
+        this.tags = new ArrayList<>();
+        for (String s:tagList) {
+            tags.add(s);
+        }
+    }
     @Override
     public String toString() {
-        return "EncryptedP{" +
-                "value='" + value + '\'' +
-                ", userName='" + userName + '\'' +
-                ", tags=" + tags +
-                '}';
+        return String.format("Password Entry %d:%nUsername: %s%nPassword: %s%nTags: %s%n",uid,userName,value,tags);
     }
 }
 

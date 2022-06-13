@@ -25,8 +25,26 @@ public class Main {
         TextIO textIO = TextIoFactory.getTextIO();
         TextTerminal<?> terminal = textIO.getTextTerminal();
         String next;
-        PwSafe def = new PwSafe("default");
+        PwSafe def = new PwSafe("container");
+        String init = textIO.newStringInputReader().read("Do you want to import your password safe from a file [y/n/path]");
+        switch (init){
+            case "y":
+            case "Y":
+                def.readSafeEncrypted("default_key");
+                break;
+            case "n":
+            case "N":
+                break;
+            default:
+                def.readSafeEncrypted(init,"default_key");
+        }
         while (run) {
+            if (!def.masterSet()){
+                String att1 = Encryptor.hash2(textIO.newStringInputReader().withInputMasking(true).read("First Login\nEnter your master key:"));
+                if (Encryptor.hash2(textIO.newStringInputReader().withInputMasking(true).read("Please repeat you master key:")).equals(att1)){
+                    def.setMaster(att1);
+                }
+            }
             next = String.valueOf(textIO.newStringInputReader().withMinLength(0).read("#>"));
             String[] nextLine = next.split(" ");
             switch (nextLine[0]){
@@ -38,31 +56,57 @@ public class Main {
                         String user = textIO.newStringInputReader().read("Username:");
                         String pw = textIO.newStringInputReader().withInputMasking(true).read("Password:");
                         String tags = textIO.newStringInputReader().read("Tags (space-seperated):");
-                        def.addPw(new EncryptedP(user,Encryptor.encrypt(pw,Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nIRREVERSIBLE!!!\nEnter your master password:"))),tags.split(" ")));
+                        if (nextLine.length==2) {
+                            boolean masterCorrect = false;
+                            boolean firstTry = true;
+                            String hashOne = "";
+                            while (!masterCorrect) {
+                                if (firstTry) {
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nIRREVERSIBLE!!!\nEnter your master password:"));
+                                } else {
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nWRONG MASTER KEY!!!\nEnter your master password:"));
+                                }
+                                masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
+                                firstTry=false;
+                            }
+                            def.addPw(new EncryptedP(c, user, Encryptor.encrypt(pw, hashOne), tags.split(" ")));
+                            hashOne=null;
+                        }
                         terminal.printf("Password Entry with uid: %d successfully added%n",c);
                         c++;
-                    } else if (nextLine.length > 1 && nextLine[1].equals("safe")) {
-                        if (nextLine.length > 2){
-                            safeList.add(new PwSafe(nextLine[2]));
-                        }
                     }
                     break;
                 case "get":
                     if (nextLine.length > 1 && def.validate(Integer.parseInt(nextLine[1]))){
                         terminal.print(def.get(Integer.parseInt(nextLine[1])).toString());
-                        String user = textIO.newStringInputReader().withInputMasking(true).read("Enter master key to get decrypted password:");
-                        if (!user.equals("")){
-                            StringSelection stringSelection = new StringSelection(Encryptor.decrypt(def.get(Integer.parseInt(nextLine[1])).value,Encryptor.hash(user)));
-                            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                            clipboard.setContents(stringSelection, null);
-                            terminal.print(Encryptor.decrypt(def.get(Integer.parseInt(nextLine[1])).value,Encryptor.hash(user))+"\n");
+                        if (nextLine.length==2) {
+                            boolean masterCorrect = false;
+                            boolean firstTry = true;
+                            String hashOne = "";
+                            while (!masterCorrect) {
+                                if (firstTry) {
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nIRREVERSIBLE!!!\nEnter your master password:"));
+                                } else {
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nWRONG MASTER KEY!!!\nEnter your master password:"));
+                                }
+                                masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
+                                firstTry=false;
+                            }
+                            if (!hashOne.equals("e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")){
+                                StringSelection stringSelection = new StringSelection(Encryptor.decrypt(def.get(Integer.parseInt(nextLine[1])).value,hashOne));
+                                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                                clipboard.setContents(stringSelection, null);
+                                terminal.print(Encryptor.decrypt(def.get(Integer.parseInt(nextLine[1])).value,hashOne)+"\n");
+                            }
+                            hashOne=null;
                         }
+
                     }
                     break;
                 case "read":
                     if (nextLine.length>1&&nextLine[1].equals("safe")) {
                         if (nextLine.length==2) {
-                            def.readSafeEncrypted("test");
+                            def.readSafeEncrypted("default_key");
                         }
                     }
                     break;
@@ -70,7 +114,7 @@ public class Main {
                     if (nextLine.length>1&&nextLine[1].equals("safe")){
                         if (nextLine.length==2){
                             try {
-                                def.writeSafeEncrypted("test");
+                                def.writeSafeEncrypted("default_key");
                             } catch (InvalidAlgorithmParameterException | NoSuchAlgorithmException |
                                      BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException |
                                      InvalidKeyException e) {
@@ -82,6 +126,8 @@ public class Main {
                 case "print":
                     terminal.print(def+"\n");
                     break;
+                case "list":
+                    terminal.print(def.toString());
             }
         }
         textIO.dispose();

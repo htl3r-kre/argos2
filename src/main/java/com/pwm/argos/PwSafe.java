@@ -22,6 +22,19 @@ import javax.crypto.NoSuchPaddingException;
  */
 public class PwSafe {
 
+    private String doubleMasterHash;
+
+    public boolean masterSet(){
+        return doubleMasterHash!=null;
+    }
+
+    public String getDoubleMasterHash(){
+        return doubleMasterHash;
+    }
+
+    public void setMaster(String doubleHash){
+        this.doubleMasterHash=doubleHash;
+    }
     private String name;
     /**
      * Stores the passwords in an arraylist
@@ -40,6 +53,10 @@ public class PwSafe {
 
     public PwSafe (String name){
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     /**
@@ -77,7 +94,10 @@ public class PwSafe {
      */
     public void readSafe () {
         try {
-            data = new Gson().fromJson(Files.readString(Paths.get(path)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
+            String safeString = Files.readString(Paths.get(path));
+            String[] args = safeString.split("@@@");
+            setMaster(args[0]);
+            data = new Gson().fromJson(args[1], new TypeToken<ArrayList<EncryptedP>>(){}.getType());
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -85,7 +105,10 @@ public class PwSafe {
 
     public void readSafe (String pathArg) {
         try {
-            data = new Gson().fromJson(Files.readString(Paths.get(path)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
+            String safeString = Files.readString(Paths.get(path));
+            String[] args = safeString.split("@@@");
+            setMaster(args[0]);
+            data = new Gson().fromJson(args[1], new TypeToken<ArrayList<EncryptedP>>(){}.getType());
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -93,7 +116,10 @@ public class PwSafe {
 
     public void readSafeEncrypted (String key) {
         try {
-            data = new Gson().fromJson(Encryptor.decrypt((Files.readString(Paths.get(path))),Encryptor.hash(key)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
+            String safeString = Files.readString(Paths.get(path));
+            String[] args = safeString.split("@@@");
+            setMaster(args[0]);
+            data = new Gson().fromJson(Encryptor.decrypt((args[1]),Encryptor.hash(key)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
         } catch (IOException e){
             e.printStackTrace();
         } catch (InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException |
@@ -104,8 +130,12 @@ public class PwSafe {
 
     public void readSafeEncrypted (String pathArg,String key) {
         try {
-            data = new Gson().fromJson(Files.readString(Paths.get(path)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
-        } catch (IOException e){
+            String safeString = Files.readString(Paths.get(pathArg));
+            String[] args = safeString.split("@@@");
+            setMaster(args[0]);
+            data = new Gson().fromJson(Encryptor.decrypt((args[1]),Encryptor.hash(key)), new TypeToken<ArrayList<EncryptedP>>(){}.getType());
+        } catch (InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException |
+                 NoSuchAlgorithmException | BadPaddingException | InvalidKeyException | IOException e){
             e.printStackTrace();
         }
     }
@@ -114,7 +144,7 @@ public class PwSafe {
      * writes the safe to a file at {@link PwSafe#path}
      */
     public void writeSafe () {
-        String safeString = new Gson().toJson(data);
+        String safeString = doubleMasterHash + "@@@" + new Gson().toJson(data);
         System.out.println(safeString);
         try {
             Files.writeString(Paths.get(path), safeString, StandardOpenOption.CREATE);
@@ -124,7 +154,7 @@ public class PwSafe {
     }
 
     public void writeSafe (String pathArg) {
-        String safeString = new Gson().toJson(data);
+        String safeString = doubleMasterHash + "@@@" + new Gson().toJson(data);
         System.out.println(safeString);
         try {
             Files.writeString(Paths.get(pathArg), safeString, StandardOpenOption.CREATE);
@@ -134,7 +164,7 @@ public class PwSafe {
     }
 
     public void writeSafeEncrypted (String key,String pathArg) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        String safeString = Encryptor.encrypt(new Gson().toJson(data),Encryptor.hash(key));
+        String safeString = doubleMasterHash + "@@@" + Encryptor.encrypt(new Gson().toJson(data),Encryptor.hash(key));
         System.out.println(safeString);
         try {
             Files.writeString(Paths.get(pathArg), safeString, StandardOpenOption.CREATE);
@@ -144,7 +174,7 @@ public class PwSafe {
     }
 
     public void writeSafeEncrypted (String key) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
-        String safeString = Encryptor.encrypt(new Gson().toJson(data),Encryptor.hash(key));
+        String safeString = doubleMasterHash + "@@@" + Encryptor.encrypt(new Gson().toJson(data),Encryptor.hash(key));
         System.out.println(safeString);
         try {
             Files.writeString(Paths.get(path), safeString, StandardOpenOption.CREATE);
@@ -157,9 +187,6 @@ public class PwSafe {
 
     @Override
     public String toString() {
-        return "PwSafe{" +
-                "data=" + data +
-                ", at path='" + path + '\'' +
-                '}';
+        return String.format("Password Safe %s%n",name)+data+"\n";
     }
 }
