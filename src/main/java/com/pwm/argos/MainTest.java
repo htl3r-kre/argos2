@@ -15,7 +15,9 @@ public class MainTest {
         EncryptedP p2 = new EncryptedP("hashvalue","user","tag1","tag2");
         EncryptedP p3 = new EncryptedP("hashvalue","user","tag1","tag2");
         PwSafe test = new PwSafe(p1,p2,p3);
-        test.writeSafe("safe.pw");
+        test.writeSafeEncrypted("test");
+        test.readSafeEncrypted("test");
+        System.out.println(test);
         String a = Encryptor.encrypt("hallo",testHash);
         System.out.println(Encryptor.decrypt(a,testHash));
     }

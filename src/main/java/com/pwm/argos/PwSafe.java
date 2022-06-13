@@ -69,7 +69,7 @@ public class PwSafe {
     }
 
     /*public ArrayList<EncryptedP> searchFor(String... args){
-        
+
     }*/
 
     /**
