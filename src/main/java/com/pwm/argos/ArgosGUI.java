@@ -11,10 +11,13 @@ import java.util.Objects;
 public class ArgosGUI extends Application {
     double x, y = 0;
 
+
+
+
     @Override
     public void start(Stage stage) throws Exception {
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main-view.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("main.fxml")));
         Scene sc = new Scene(root);     //Scene
         stage.setTitle("Argos");
 
@@ -28,6 +31,8 @@ public class ArgosGUI extends Application {
             stage.setY(evt.getScreenY() - y);
         });
 
+
+
         //Stage
         stage.setScene(sc);
         stage.show();
@@ -36,8 +41,6 @@ public class ArgosGUI extends Application {
 
     }
 
-    public static void main(String[] args) {
-        launch();
-    }
+
 }
 
