@@ -126,8 +126,9 @@ public class Main {
                 case "print":
                     terminal.print(def+"\n");
                     break;
-                case "list":
-                    terminal.print(def.toString());
+
+                case "help":
+                    terminal.print("Argos Help:\nnew entry - creates a new password entry\nget [uid] - gets the entry with given uid\nwrite safe - writes the safe to a file\nread safe - reads the safe from a file\nprint - prints the safe\nquit - quits the application (recommended to write safe first)\n");
             }
         }
         textIO.dispose();
