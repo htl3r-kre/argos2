@@ -9,8 +9,9 @@ import javafx.stage.Stage;
 import java.util.Objects;
 
 public class ArgosGUI extends Application {
+    static PwSafe rft;
+    static PwSafe je;
     double x, y = 0;
-
 
 
 
@@ -23,8 +24,11 @@ public class ArgosGUI extends Application {
 
         //move around
         root.setOnMousePressed(evt -> {
+
             x = evt.getSceneX();
             y = evt.getSceneY();
+
+
         });
         root.setOnMouseDragged(evt -> {
             stage.setX(evt.getScreenX() - x);
@@ -34,11 +38,20 @@ public class ArgosGUI extends Application {
 
 
         //Stage
+        stage.setResizable(false);
         stage.setScene(sc);
         stage.show();
 
 
 
+    }
+
+    public static void main(String[] args) {
+        rft = new PwSafe("Adobe");
+        rft.addPw(new EncryptedP("test1", "test2", "test3"));
+        je = new PwSafe("Google");
+        je.addPw(new EncryptedP("user", "passwort", "tag"));
+        launch();
     }
 
 

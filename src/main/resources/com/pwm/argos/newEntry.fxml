@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pwm.argos.Controller">
+    <TextField fx:id="userEntry" layoutX="33.0" layoutY="28.0" promptText="user" />
+    <TextField fx:id="passwordEntry" layoutX="33.0" layoutY="73.0" promptText="password" />
+    <TextField fx:id="tagsEntry" layoutX="33.0" layoutY="125.0" promptText="tag1, tag2, tag3" />
+    <Text fill="#a43d3d" layoutX="300.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Penis" wrappingWidth="180.7451171875">
+        <font>
+          <Font size="72.0" />
+        </font>
+    </Text>
+   <PasswordField layoutX="258.0" layoutY="125.0" />
+</Pane>
