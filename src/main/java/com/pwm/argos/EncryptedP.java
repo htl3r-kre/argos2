@@ -9,6 +9,14 @@ public class EncryptedP {
     protected String userName;
     protected ArrayList<String> tags;
 
+    public String getUserName(){
+        return userName;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
     public EncryptedP(String... args) {
         if (args.length >= 3) {
             this.userName = args[1];
