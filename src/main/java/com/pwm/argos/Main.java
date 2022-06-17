@@ -8,6 +8,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import java.lang.reflect.Array;
+import java.nio.file.NoSuchFileException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -30,13 +31,21 @@ public class Main {
         switch (init){
             case "y":
             case "Y":
-                def.readSafeEncrypted("default_key");
+                try {
+                    def.readSafeEncrypted("default_key");
+                } catch (NoSuchFileException e){
+                    terminal.print("Couldn't find safe.");
+                }
                 break;
             case "n":
             case "N":
                 break;
             default:
+                try {
                 def.readSafeEncrypted(init,"default_key");
+                } catch (NoSuchFileException e){
+                    terminal.print("Couldn't find safe.");
+                }
         }
         while (run) {
             if (!def.masterSet()){
@@ -106,7 +115,11 @@ public class Main {
                 case "read":
                     if (nextLine.length>1&&nextLine[1].equals("safe")) {
                         if (nextLine.length==2) {
-                            def.readSafeEncrypted("default_key");
+                            try {
+                                def.readSafeEncrypted("default_key");
+                            } catch (NoSuchFileException e){
+                                terminal.print("Couldn't find safe.");
+                            }
                         }
                     }
                     break;
