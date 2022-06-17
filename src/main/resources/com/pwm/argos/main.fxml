@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane prefHeight="456.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pwm.argos.Controller">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="456.0" prefWidth="647.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.pwm.argos.Controller">
    <left>
       <VBox alignment="BOTTOM_LEFT" prefHeight="456.0" prefWidth="211.0" style="-fx-background-color: #303132;" BorderPane.alignment="CENTER">
          <children>
@@ -18,13 +18,13 @@
                   <Font size="64.0" />
                </font>
             </Text>
-            <Button id="button1" fx:id="b1" mnemonicParsing="false" prefHeight="64.0" prefWidth="211.0" style="-fx-background-color: #4d514e#4d514e #4d514e#4d514e;" text="Button" />
-            <Button id="button2" fx:id="b2" mnemonicParsing="false" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="Button" />
-            <Button fx:id="b3" mnemonicParsing="false" prefHeight="59.0" prefWidth="217.0" style="-fx-background-color: #4d514e#4d514e;" text="Button" />
-            <Button fx:id="b4" mnemonicParsing="false" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="Button" />
-            <Button fx:id="b5" mnemonicParsing="false" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="Button" />
-            <Button fx:id="b6" mnemonicParsing="false" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="Button" />
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text=" Argos by Kreuzer und Waldecker" wrappingWidth="198.21630859375" />
+            <Button id="button1" fx:id="b1" mnemonicParsing="false" onAction="#onActionb1" prefHeight="64.0" prefWidth="211.0" style="-fx-background-color: #4d514e#4d514e #4d514e#4d514e;" text="1" />
+            <Button id="button2" fx:id="b2" mnemonicParsing="false" onAction="#onActionb2" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="2" />
+            <Button fx:id="b3" mnemonicParsing="false" onAction="#onActionb3" prefHeight="59.0" prefWidth="217.0" style="-fx-background-color: #4d514e#4d514e;" text="3" />
+            <Button fx:id="b4" mnemonicParsing="false" onAction="#onActionb4" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="4" />
+            <Button fx:id="b5" mnemonicParsing="false" onAction="#onActionb5" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="5" />
+            <Button fx:id="b6" mnemonicParsing="false" onAction="#onActionb6" prefHeight="59.0" prefWidth="224.0" style="-fx-background-color: #4d514e#4d514e;" text="6" />
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="  Argos by Kreuzer und Waldecker" wrappingWidth="198.21630859375" />
          </children>
       </VBox>
    </left>
@@ -32,15 +32,16 @@
       <Pane prefHeight="456.0" prefWidth="402.0" style="-fx-background-color: #383838;" BorderPane.alignment="CENTER">
          <children>
             <Text fill="WHITE" layoutX="34.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="User:" />
-            <Text fill="WHITE" layoutX="34.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Passwort:" />
-            <Label layoutX="33.0" layoutY="111.0" prefHeight="24.0" prefWidth="127.0" text="Label" textFill="#eeebeb" />
-            <Label layoutX="34.0" layoutY="175.0" prefHeight="24.0" prefWidth="127.0" text="Label" textFill="#eeebeb" />
-            <Label layoutX="41.0" layoutY="21.0" text="Label" textFill="WHITE">
+            <Text fill="WHITE" layoutX="34.0" layoutY="171.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:" />
+            <Label fx:id="user" layoutX="33.0" layoutY="111.0" prefHeight="24.0" prefWidth="127.0" text="Label" textFill="#eeebeb" />
+            <Label fx:id="password" layoutX="34.0" layoutY="175.0" prefHeight="24.0" prefWidth="127.0" text="Label" textFill="#eeebeb" />
+            <Label fx:id="name" layoutX="41.0" layoutY="21.0" text="Wilkommen" textFill="WHITE">
                <font>
                   <Font size="28.0" />
                </font>
             </Label>
             <Line endX="100.0" layoutX="132.0" layoutY="57.0" startX="-100.0" stroke="#319e47" />
+            <Button fx:id="b7" layoutX="348.0" layoutY="418.0" mnemonicParsing="false" onAction="#newEntry" prefHeight="37.0" prefWidth="88.0" style="-fx-background-color: #4d514e#4d514e #4d514e#4d514e;" text="New " />
          </children>
       </Pane>
    </center>

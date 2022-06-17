@@ -7,7 +7,7 @@ import org.beryx.textio.TextTerminal;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.nio.file.NoSuchFileException;
+import java.lang.reflect.Array;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         boolean run = true;
+        int c = 0;
         ArrayList<PwSafe> safeList = new ArrayList<>();
         TextIO textIO = TextIoFactory.getTextIO();
         TextTerminal<?> terminal = textIO.getTextTerminal();
@@ -29,21 +30,13 @@ public class Main {
         switch (init){
             case "y":
             case "Y":
-                try {
-                    def.readSafeEncrypted("default_key");
-                } catch (NoSuchFileException e) {
-                    terminal.print("Couldn't find your safe. Creating a new one");
-                }
+                def.readSafeEncrypted("default_key");
                 break;
             case "n":
             case "N":
                 break;
             default:
-                try {
-                    def.readSafeEncrypted(init,"default_key");
-                } catch (NoSuchFileException e) {
-                    terminal.print("Couldn't find your safe. Creating a new one");
-                }
+                def.readSafeEncrypted(init,"default_key");
         }
         while (run) {
             if (!def.masterSet()){
@@ -76,11 +69,11 @@ public class Main {
                                 masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
                                 firstTry=false;
                             }
-                            def.addPw(new EncryptedP(def.uidCount, user, Encryptor.encrypt(pw, hashOne), tags.split(" ")));
+                            def.addPw(new EncryptedP(c, user, Encryptor.encrypt(pw, hashOne), tags.split(" ")));
                             hashOne=null;
                         }
-                        terminal.printf("Password Entry with uid: %d successfully added%n",def.uidCount);
-                        def.uidCount++;
+                        terminal.printf("Password Entry with uid: %d successfully added%n",c);
+                        c++;
                     }
                     break;
                 case "get":
@@ -92,9 +85,9 @@ public class Main {
                             String hashOne = "";
                             while (!masterCorrect) {
                                 if (firstTry) {
-                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nEnter your master key to decrypt:"));
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nIRREVERSIBLE!!!\nEnter your master password:"));
                                 } else {
-                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nWRONG MASTER KEY!!!\nEnter your master password to decrypt:"));
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nWRONG MASTER KEY!!!\nEnter your master password:"));
                                 }
                                 masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
                                 firstTry=false;
@@ -113,11 +106,7 @@ public class Main {
                 case "read":
                     if (nextLine.length>1&&nextLine[1].equals("safe")) {
                         if (nextLine.length==2) {
-                            try {
-                                def.readSafeEncrypted("default_key");
-                            } catch (NoSuchFileException e) {
-                                terminal.print("Couldn't find your safe.");
-                            }
+                            def.readSafeEncrypted("default_key");
                         }
                     }
                     break;
@@ -137,6 +126,9 @@ public class Main {
                 case "print":
                     terminal.print(def+"\n");
                     break;
+
+                case "help":
+                    terminal.print("Argos Help:\nnew entry - creates a new password entry\nget [uid] - gets the entry with given uid\nwrite safe - writes the safe to a file\nread safe - reads the safe from a file\nprint - prints the safe\nquit - quits the application (recommended to write safe first)\n");
             }
         }
         textIO.dispose();
