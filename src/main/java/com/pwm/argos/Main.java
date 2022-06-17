@@ -21,7 +21,6 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         boolean run = true;
-        int c = 0;
         ArrayList<PwSafe> safeList = new ArrayList<>();
         TextIO textIO = TextIoFactory.getTextIO();
         TextTerminal<?> terminal = textIO.getTextTerminal();
@@ -65,7 +64,7 @@ public class Main {
                         String user = textIO.newStringInputReader().read("Username:");
                         String pw = textIO.newStringInputReader().withInputMasking(true).read("Password:");
                         String tags = textIO.newStringInputReader().read("Tags (space-seperated):");
-                        if (nextLine.length==2) {
+                        if (nextLine.length==3) {
                             boolean masterCorrect = false;
                             boolean firstTry = true;
                             String hashOne = "";
@@ -78,11 +77,11 @@ public class Main {
                                 masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
                                 firstTry=false;
                             }
-                            def.addPw(new EncryptedP(c, user, Encryptor.encrypt(pw, hashOne), tags.split(" ")));
+                            def.addPw(new EncryptedP(def.uidCount, user, Encryptor.encrypt(pw, hashOne), tags.split(" ")));
                             hashOne=null;
                         }
-                        terminal.printf("Password Entry with uid: %d successfully added%n",c);
-                        c++;
+                        terminal.printf("Password Entry with uid: %d successfully added%n",def.uidCount);
+                        def.uidCount++;
                     }
                     break;
                 case "get":
@@ -114,7 +113,7 @@ public class Main {
                     break;
                 case "read":
                     if (nextLine.length>1&&nextLine[1].equals("safe")) {
-                        if (nextLine.length==2) {
+                        if (nextLine.length==2&&!nextLine[1].contains("@")) {
                             try {
                                 def.readSafeEncrypted("default_key");
                             } catch (NoSuchFileException e){
@@ -141,7 +140,7 @@ public class Main {
                     break;
 
                 case "help":
-                    terminal.print("Argos Help:\nnew entry - creates a new password entry\nget [uid] - gets the entry with given uid\nwrite safe - writes the safe to a file\nread safe - reads the safe from a file\nprint - prints the safe\nquit - quits the application (recommended to write safe first)\n");
+                    terminal.print("Argos Help:\nnew entry [Name] - creates a new password entry named [Name]\nget [uid] - gets the entry with given uid\nwrite safe - writes the safe to a file\nread safe - reads the safe from a file\nprint - prints the safe\nquit - quits the application (recommended to write safe first)\n");
             }
         }
         textIO.dispose();

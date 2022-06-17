@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 
 public class EncryptedP {
+
+    protected String entryName;
     protected int uid;
     protected String value;
     protected String userName;
