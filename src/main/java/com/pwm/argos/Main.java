@@ -77,7 +77,7 @@ public class Main {
                                 masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
                                 firstTry=false;
                             }
-                            def.addPw(new EncryptedP(def.uidCount, user, Encryptor.encrypt(pw, hashOne), tags.split(" ")));
+                            def.addPw(new EncryptedP(def.uidCount, user, Encryptor.encrypt(pw, hashOne), tags.split(" "),nextLine[2]));
                             hashOne=null;
                         }
                         terminal.printf("Password Entry with uid: %d successfully added%n",def.uidCount);
@@ -93,9 +93,9 @@ public class Main {
                             String hashOne = "";
                             while (!masterCorrect) {
                                 if (firstTry) {
-                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nIRREVERSIBLE!!!\nEnter your master password:"));
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nEnter your master password to decrypt:"));
                                 } else {
-                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nWRONG MASTER KEY!!!\nEnter your master password:"));
+                                    hashOne = Encryptor.hash(textIO.newStringInputReader().withInputMasking(true).read("\nWrong master password\n Enter your master password to decrypt:"));
                                 }
                                 masterCorrect = Encryptor.hash(hashOne).equals(def.getDoubleMasterHash());
                                 firstTry=false;

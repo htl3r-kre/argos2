@@ -30,16 +30,7 @@ public class EncryptedP {
         }
     }
 
-    public EncryptedP(String user, String pw, String[] tagList) {
-        this.value = pw;
-        this.userName = user;
-        this.tags = new ArrayList<>();
-        for (String s:tagList) {
-            tags.add(s);
-        }
-    }
-
-    public EncryptedP(int uid, String user, String pw, String[] tagList) {
+    public EncryptedP(int uid, String user, String pw, String[] tagList, String entryName) {
         this.uid = uid;
         this.value = pw;
         this.userName = user;
@@ -47,6 +38,7 @@ public class EncryptedP {
         for (String s:tagList) {
             tags.add(s);
         }
+        this.entryName = entryName;
     }
     @Override
     public String toString() {
